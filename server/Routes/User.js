@@ -8,7 +8,7 @@ const {getAllUsers,getUserById,createNewUser,updateUser,deleteUser}=require("../
 
 router.get("/",verifyJWT,getAllUsers)
 router.get("/:_id",verifyJWT,getUserById)
-router.post("/",verifyJWT,createNewUser)
+router.post("/",createNewUser)
 router.put("/",verifyJWT,updateUser)
 router.delete("/",verifyJWT,deleteUser)
 router.put("/complete/:id",verifyJWT,updateUser)

@@ -1,5 +1,7 @@
 const User=require('../Modules/User')
 const Apartment=require('../Modules/Apartment')
+const bcrypt = require('bcrypt');
+
 
 const createNewUser=async(req,res)=>{
     console.log("createNewUser");
@@ -9,10 +11,10 @@ const createNewUser=async(req,res)=>{
     const user=await User.create({
         name,
         username,
-        password,
+        password: hashedPassword, // שמירת הסיסמה המוצפנת
         phone,
         email,
-        roles})
+       })
     if(user)
         return res.status(201).json({message:'new user created'})
     else
