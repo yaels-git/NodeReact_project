@@ -53,7 +53,7 @@ const resetFields = () => {
 };
 
 const handleSignUp = () => {
-    axios.post('http://localhost:1111/api/user', {
+    axios.post('http://localhost:1111/api/auth/register', {
         name,
         username,
         password,
@@ -76,6 +76,7 @@ const handleSignUp = () => {
             alert(`Error: ${error.message}`);
         }
     });
+   
 };
    
     return (

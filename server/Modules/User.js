@@ -22,9 +22,9 @@ const user = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
-        lowercase: true,
-        trim: true
+        // required: true,
+        // lowercase: true,
+        // trim: true
     },
     roles:{
         type:String,

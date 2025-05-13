@@ -115,22 +115,31 @@ import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import Sinup from './Sinup';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // ייבוא useNavigate
+import { useDispatch,useSelector } from 'react-redux';
+import { setToken, setUser,setRole } from '../../redux/tokenSlice';
 
 export default function LoginDemo() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showSignUp, setShowSignUp] = useState(false); // ניהול הצגת קומפוננטת ההרשמה
+    const dispatch = useDispatch();
 
+    const [showSignUp, setShowSignUp] = useState(false); // ניהול הצגת קומפוננטת ההרשמה
+    const navigate = useNavigate(); // יצירת פונקציה לניווט
     const handleLogin = () => {
         // שליחת בקשה לשרת
-        fetch('http://localhost:1111/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
+       axios.post('http://localhost:1111/api/auth/login', {
+
+            username, password
         })
             .then((response) => {
+                dispatch(setUser(response.data.user));
+                dispatch(setRole(response.data.role));
+                dispatch(setToken(response.data.accessToken));
+                // localStorage.setItem('token', response.data.accessToken); // שמירת טוקן הגישה ב-localStorage
+                console.log('Token:', response.data.accessToken);
+                 navigate('/empty'); // ניווט לדף הבית לאחר התחברות מוצלחת
                 if (!response.ok) {
                     throw new Error('Invalid credentials');
                 }
@@ -194,7 +203,7 @@ export default function LoginDemo() {
                     <Sinup />
                 </div>
             </div>
-          {/* הצגת קומפוננטת ההרשמה */}
+            {/* הצגת קומפוננטת ההרשמה */}
         </div>
     );
 }
