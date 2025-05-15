@@ -124,7 +124,7 @@ export default function LoginDemo() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
-
+    const [showCardApartmen, setShowCardApartmen] = useState(false);
     const [showSignUp, setShowSignUp] = useState(false); // ניהול הצגת קומפוננטת ההרשמה
     const navigate = useNavigate(); // יצירת פונקציה לניווט
     const handleLogin = () => {
@@ -139,8 +139,10 @@ export default function LoginDemo() {
                 dispatch(setToken(response.data.accessToken));
                 // localStorage.setItem('token', response.data.accessToken); // שמירת טוקן הגישה ב-localStorage
                 console.log('Token:', response.data.accessToken);
-                 navigate('/empty'); // ניווט לדף הבית לאחר התחברות מוצלחת
-                if (!response.ok) {
+            //    setShowCardApartmen(true); // הצגת קומפוננטת כרטיס הדירה
+                 navigate('/cardApartmen'); // ניווט לדף הבית לאחר התחברות מוצלחת
+                
+                 if (!response.ok) {
                     throw new Error('Invalid credentials');
                 }
                 return response.json();

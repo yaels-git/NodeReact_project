@@ -32,7 +32,7 @@ export default function TemplateDemo() {
 
     ];
 
-    const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>;
+   // const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>;
     const end = (
         <div className="flex align-items-center gap-2">
             <Button onClick={() => {
@@ -44,7 +44,8 @@ export default function TemplateDemo() {
 
     return (
         <div className="card">
-            <Menubar model={items} start={start} end={end} />
+            <Menubar model={items} end={end} />
+          
         </div>
     )
 }
