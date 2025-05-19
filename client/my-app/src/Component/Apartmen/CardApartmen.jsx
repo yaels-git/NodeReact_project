@@ -71,7 +71,8 @@ import { Button } from 'primereact/button';
 import axios from 'axios';
 import { Dialog } from 'primereact/dialog'; // ייבוא המודאל
 
-export default function CardApartmen() {
+export default function CardApartmen
+() {
     const [apartments, setApartments] = useState([]); // State לאחסון רשימת הדירות
     const [selectedApartment, setSelectedApartment] = useState(null); // דירה שנבחרה
     const [isModalVisible, setIsModalVisible] = useState(false); // ניהול הצגת המודאל

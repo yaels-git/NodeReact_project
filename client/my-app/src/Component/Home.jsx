@@ -22,11 +22,13 @@ export default function TemplateDemo() {
     const items = [
         {
             label: 'Home',
-            icon: 'pi pi-home'
+            icon: 'pi pi-home',
+            command: () => navigate('/cardapartmen') // ניווט ל-CardApartmen
         },
         {
-            label: 'Features',
-            icon: 'pi pi-star'
+            label: 'MyApartment',
+            icon: 'pi pi-star',
+            command: () => navigate('/myapartment') // ניווט ל-CardApartmen
         },
 
 
