@@ -16,32 +16,7 @@ export default function Sinup() {
     const [roles, setRoles] = useState('User'); // ניהול תפקיד (ברירת מחדל: User)
 
  
-//     const handleSignUp = () => {
-//         // שליחת בקשה לשרת
-//        fetch('http://localhost:1111/api/user', {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ name, username, password, phone, email, roles }),
-// })
-//     .then((response) => {
-//         console.log('Response:', response);
-//         if (!response.ok) {
-//             throw new Error(`Failed to sign up: ${response.status} ${response.statusText}`);
-//         }
-//         return response.json();
-//     })
-//     .then((data) => {
-//         console.log('Sign Up successful:', data);
-//         resetFields();
-//         setVisible(false);
-//     })
-//     .catch((error) => {
-//         console.error('Error:', error);
-//         alert(`Error: ${error.message}`);
-//     });
-// };
+
 // פונקציה לאיפוס השדות
 const resetFields = () => {
     setName('');

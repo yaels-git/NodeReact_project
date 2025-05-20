@@ -1,64 +1,65 @@
+
 // import React, { useState, useEffect } from 'react';
 // import { Card } from 'primereact/card';
 // import { Button } from 'primereact/button';
 // import axios from 'axios';
-// import { Dialog } from 'primereact/dialog'; // ייבוא המודאל
+// import { Dialog } from 'primereact/dialog';
+// import AddApartment from'./AddApartment';
+// export default function MyApartment() {
+//     const [apartments, setApartments] = useState([]);
+//     const [selectedApartment, setSelectedApartment] = useState(null);
+//     const [isModalVisible, setIsModalVisible] = useState(false);
 
-// export default function MyApartment
-// () {
-//     const [apartments, setApartments] = useState([]); // State לאחסון רשימת הדירות
-//     const [selectedApartment, setSelectedApartment] = useState(null); // דירה שנבחרה
-//     const [isModalVisible, setIsModalVisible] = useState(false); // ניהול הצגת המודאל
-//     // שליפת נתונים מהשרת
+//     // שליפת כל הדירות
 //     useEffect(() => {
 //         axios.get('http://localhost:1111/api/apartment')
-//             .then((response) => {
-//                 console.log('Data fetched:', response.data); // בדוק אם הנתונים נשלפים
-//                 setApartments(response.data);
-//             })
-//             .catch((error) => {
-//                 console.error('Error fetching apartments:', error);
-//             });
+//             .then((response) => setApartments(response.data))
+//             .catch((error) => console.error('Error fetching apartments:', error));
 //     }, []);
 
+//     // מזהה המשתמש הנוכחי
+//     const userId = localStorage.getItem('userId');
+
+//     // רק הדירות שלך
+//     const myApartments = apartments.filter(apartment => apartment.user === userId);
+
+//     // מחיקה
+//     const handleDelete = async (apartmentId) => {
+//         try {
+//             await axios.delete(`http://localhost:1111/api/apartment/${apartmentId}`);
+//             setApartments(apartments.filter(ap => ap._id !== apartmentId));
+//         } catch (error) {
+//             alert('מחיקה נכשלה');
+//         }
+//     };
+
 //     return (
+
 //         <div className="card flex justify-content-center flex-wrap gap-3">
-//             {apartments.map((apartment) => (
-                
+//                  <AddApartment />
+//             {myApartments.map((apartment) => (
 //                 <Card
-//                     key={apartment._id} // ודא שלכל דירה יש מזהה ייחודי
+//                     key={apartment._id}
 //                     title={`דירה ב${apartment.city}`}
 //                     subTitle={`שכונה: ${apartment.neighborhood || 'לא צוינה'}, רחוב: ${apartment.street}, מספר: ${apartment.building}`}
 //                     footer={
 //                         <div className="flex justify-content-between">
-//                            <Button 
-//                              label="הצגת נתונים" 
-//                                 icon="pi pi-info" 
-//                                 onClick={() => {
-//         setSelectedApartment(apartment); // שמירת הדירה שנבחרה
-//         setIsModalVisible(true); // הצגת המודאל
-//     }} 
-// />
-//                             <Button 
-//                                 label="יצירת קשר" 
-//                                 severity="secondary" 
-//                                 icon="pi pi-envelope" 
-//                                 onClick={() => alert(`צור קשר עם המשתמש: ${apartment.user}`)} 
-//                             />
+//                             <Button label="הצגת נתונים" icon="pi pi-info"
+//                                 onClick={() => { setSelectedApartment(apartment); setIsModalVisible(true); }} />
+//                             <Button label="מחיקה" icon="pi pi-trash" severity="danger"
+//                                 onClick={() => handleDelete(apartment._id)} />
+//                             <Button label="עריכה" icon="pi pi-pencil" severity="info"
+//                                 onClick={() => { /* כאן תממש פתיחת מודאל או מעבר לעמוד עריכה */ }} />
 //                         </div>
 //                     }
-                   
 //                     className="md:w-25rem"
-//                 >
-                    
-//                 </Card>
+//                 />
 //             ))}
-     
 //             {/* מודאל להצגת פרטי הדירה */}
-//             <Dialog 
-//                 header={`פרטי דירה ב${selectedApartment?.city || ''}`} 
-//                 visible={isModalVisible} 
-//                 style={{ width: '50vw' }} 
+//             <Dialog
+//                 header={`פרטי דירה ב${selectedApartment?.city || ''}`}
+//                 visible={isModalVisible}
+//                 style={{ width: '50vw' }}
 //                 onHide={() => setIsModalVisible(false)}
 //             >
 //                 {selectedApartment && (
@@ -82,51 +83,69 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import axios from 'axios';
 import { Dialog } from 'primereact/dialog';
+import AddApartment from './AddApartment';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function MyApartment() {
     const [apartments, setApartments] = useState([]);
     const [selectedApartment, setSelectedApartment] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const { token, role, user } = useSelector((state) => state.token);
 
-    // שליפת כל הדירות
     useEffect(() => {
-        axios.get('http://localhost:1111/api/apartment')
+        axios.get(`http://localhost:1111/api/apartment/${user._id}`)
             .then((response) => setApartments(response.data))
             .catch((error) => console.error('Error fetching apartments:', error));
     }, []);
 
     // מזהה המשתמש הנוכחי
-    const userId = localStorage.getItem('userId');
 
-    // רק הדירות שלך
-    const myApartments = apartments.filter(apartment => apartment.user === userId);
+    // הדפסת userId לבדיקה
+    // console.log('userId:', userId);
+
+    // רק הדירות שלך (השווה כמחרוזות למניעת בעיות)
+    // const myApartments = apartments.filter(apartment =>
+    //     String(apartment.user) === String(userId)
+    // );
 
     // מחיקה
     const handleDelete = async (apartmentId) => {
         try {
-            await axios.delete(`http://localhost:1111/api/apartment/${apartmentId}`);
+            await axios.delete('http://localhost:1111/api/apartment/delete',{
+                data: {_id: apartmentId} ,
+                headers:{Authorization:`Bearer ${token}`}}
+               
+                );
             setApartments(apartments.filter(ap => ap._id !== apartmentId));
         } catch (error) {
             alert('מחיקה נכשלה');
         }
     };
 
+    // יצירת קשר (דוגמה בסיסית, אפשר להחליף במייל/טלפון)
+    const handleContact = (apartment) => {
+        alert(`פרטי קשר:\nאימייל: ${apartment.email || 'לא קיים'}\nטלפון: ${apartment.phone || 'לא קיים'}`);
+    };
+
     return (
-        
         <div className="card flex justify-content-center flex-wrap gap-3">
-            {myApartments.map((apartment) => (
+            <AddApartment />
+            {apartments.length === 0 && <p>אין לך דירות להצגה.</p>}
+            {apartments.map((apartment) => (
                 <Card
                     key={apartment._id}
                     title={`דירה ב${apartment.city}`}
                     subTitle={`שכונה: ${apartment.neighborhood || 'לא צוינה'}, רחוב: ${apartment.street}, מספר: ${apartment.building}`}
                     footer={
-                        <div className="flex justify-content-between">
+                        <div className="flex justify-content-between gap-2">
                             <Button label="הצגת נתונים" icon="pi pi-info"
                                 onClick={() => { setSelectedApartment(apartment); setIsModalVisible(true); }} />
                             <Button label="מחיקה" icon="pi pi-trash" severity="danger"
                                 onClick={() => handleDelete(apartment._id)} />
                             <Button label="עריכה" icon="pi pi-pencil" severity="info"
-                                onClick={() => { /* כאן תממש פתיחת מודאל או מעבר לעמוד עריכה */ }} />
+                                onClick={() => { /* כאן אפשר להוסיף עריכה */ }} />
+                            <Button label="יצירת קשר" icon="pi pi-envelope" severity="success"
+                                onClick={() => handleContact(apartment)} />
                         </div>
                     }
                     className="md:w-25rem"
@@ -148,7 +167,7 @@ export default function MyApartment() {
                         <p><strong>מספר חדרים:</strong> {selectedApartment.numOfRooms}</p>
                         <p><strong>כיווני אוויר:</strong> {selectedApartment.airDirections}</p>
                         <p><strong>אפשרויות נוספות:</strong> {selectedApartment.options.join(', ')}</p>
-                        <p><strong>תיאור:</strong> {selectedApartment.discreption}</p>
+                        <p><strong>תיאור:</strong> {selectedApartment.description}</p>
                     </div>
                 )}
             </Dialog>

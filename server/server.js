@@ -6,6 +6,7 @@ const connctDB=require('./config/dbConn');
 const { default: mongoose } = require('mongoose');
 const PORT=process.env.PORT||1003
 connctDB()
+
 const app=express()
 
 //middlewareS

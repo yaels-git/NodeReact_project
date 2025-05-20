@@ -47,7 +47,7 @@ const apartment=new mongoose.Schema({
         enum:['0','1','2','3','4'],
         required:true,
     },
-    discreption:{
+    description:{
         type:String,
         required:true,
     },

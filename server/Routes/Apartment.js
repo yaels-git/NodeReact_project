@@ -7,7 +7,7 @@ const verifyJWT=require("../middleWare/varifyJWT")
 const apartmentController=require("../Controller/ApartmentController")
 
 router.get("/",apartmentController.getAllApartments)
-router.get("/:id",verifyJWT,apartmentController.getApartmentById)
+router.get("/:id",apartmentController.getApartmentById)
 router.get("/user/:id",verifyJWT,apartmentController.getApartmentByUserId)
 router.post("/",verifyJWT,apartmentController.createNewApartment)
 router.post("/login",apartmentController.logInApartment)

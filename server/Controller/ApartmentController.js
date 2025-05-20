@@ -6,17 +6,20 @@ const { createNewUser } = require("./UserController")
 
 //הוספת דירה חדשה
 const createNewApartment = async (req, res) => {
-    const { user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, discreption, options } = req.body
-    if (!user || !city || !neighborhood || !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !discreption || !options)
+    const { user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, description, options } = req.body
+    
+    console.log(user, city, neighborhood, street, building, floor, price, size, numOfRooms, airDirections, description, options )
+    if (!user || !city ||  !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !description || !options)
         return res.status(400).json({ message: 'Missing required fields' })
 
 
-    const parsedUser = await User.findById({ _id: user })
+    const parsedUser = await User.findById({ _id: user._id })
     // const newUser = await createNewUser(parsedUser);
     if (!parsedUser)
         return res.status(400).send("User is not exists")
+    
     const apartment = await Apartment.create({
-        user,
+        user:user._id,
         city,
         neighborhood,
         street,
@@ -27,7 +30,7 @@ const createNewApartment = async (req, res) => {
         size,
         numOfRooms,
         airDirections,
-        discreption,
+        description,
         options,
         isConfirm: false,
         purchaseConfirm: false
@@ -79,8 +82,8 @@ const getAllApartments = async (req, res) => {
 
 }
 const updateApartment = async (req, res) => {
-    const { _id, user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, discreption, options } = req.body
-    if (!_id || (!user || !city || !neighborhood || !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !discreption || !options))
+    const { _id, user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, description, options } = req.body
+    if (!_id || (!user || !city || !neighborhood || !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !description || !options))
         return res.status(400).json({ message: 'feild is required' })
     const apartment = await Apartment.findById(_id).exec()
     if (!apartment)
@@ -101,27 +104,29 @@ const updateApartment = async (req, res) => {
     apartment.size = size
     apartment.numOfRooms = numOfRooms
     apartment.airDirections = airDirections
-    apartment.discreption = discreption
+    apartment.description = description
     apartment.options = options
     const updatedApartment = await apartment.save()
     res.json(`'${updatedApartment.user} 'updated`)
 }
 const deleteApartment = async (req, res) => {
+    console.log("hhhh");
     const { _id } = req.body
+    console.log(_id);
     if (!_id) {
         return res.status(400).json({ message: 'Apartment ID is required' });
     }
 
-
+    console.log("hhhh");
     const apartment = await Apartment.findById(_id).exec()
     if (!apartment)
         return res.status(400).json({ message: 'apartment not found' })
-
-    if (apartment.user.toString() !== req.user._id&&'Manager'==!req.user.roles) {
-        return res.status(403).json({ message: 'You are not authorized to delete this apartment' });
-    }
+    console.log("hhhh");
+    // if (apartment.user.toString() !== req.user._id && !(req.user.roles && req.user.roles.includes('Manager'))) {
+    //     return res.status(403).json({ message: 'You are not authorized to delete this apartment' });
+    // }
     await Apartment.deleteOne({ _id })
-    res.json({ message: `Apartment '${_id}' deleted successfully` });
+    res.json({ message: `Apartment '${_id}' deleted successfully` }); console.log("hhhh");
 }
 // const deleteApartment = async (req, res) => {
 //     const { _id } = req.body
