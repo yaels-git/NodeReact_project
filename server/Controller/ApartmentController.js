@@ -8,6 +8,7 @@ const { createNewUser } = require("./UserController")
 const createNewApartment = async (req, res) => {
     const { user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, description, options } = req.body
     
+    
     console.log(user, city, neighborhood, street, building, floor, price, size, numOfRooms, airDirections, description, options )
     if (!user || !city ||  !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !description || !options)
         return res.status(400).json({ message: 'Missing required fields' })
