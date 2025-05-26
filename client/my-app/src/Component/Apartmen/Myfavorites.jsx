@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
@@ -10,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import UpdateApartment from './UpdateApartment';
 
 export default function MyApartment() {
-    const [apartments, setApartments] = useState([]);
+    const [myapartments, setApartments] = useState([]);
     const [apartment, setApartment] = useState();
 
     const [selectedApartment, setSelectedApartment] = useState(null);
@@ -21,7 +19,7 @@ export default function MyApartment() {
     const { token, role, user } = useSelector((state) => state.token);
     const getApartments = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:1111/api/apartment/${user._id}`,
+            const { data } = await axios.get(`http://localhost:1111/api/myapartments/${user._id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -29,7 +27,7 @@ export default function MyApartment() {
             console.log(data);
         }
         catch (error) {
-            console.error('Error fetching apartments:', error);
+            console.error('Error fetching myapartments:', error);
         }
     }
 
@@ -40,32 +38,15 @@ export default function MyApartment() {
 
     }, [])
 
-    // useEffect(() => {
-    //     axios.get(`http://localhost:1111/api/apartment/${user._id}`)
-    //         .then((response) => setApartments(response.data))
-    //         .catch((error) => console.error('Error fetching apartments:', error));
-    // }, []);
-
-    // מזהה המשתמש הנוכחי
-
-    // הדפסת userId לבדיקה
-    // console.log('userId:', userId);
-
-    // רק הדירות שלך (השווה כמחרוזות למניעת בעיות)
-    // const myApartments = apartments.filter(apartment =>
-    //     String(apartment.user) === String(userId)
-    // );
-
+   
     // מחיקה
-    const handleDelete = async (apartmentId) => {
+    const handleDelete = async (myapartmentId) => {
+        console.log('Deleting apartment with ID:', myapartmentId);
         try {
-            await axios.delete('http://localhost:1111/api/apartment/delete', {
-                data: { _id: apartmentId },
+            await axios.delete(`http://localhost:1111/api/myapartments/${myapartmentId}`, {
                 headers: { Authorization: `Bearer ${token}` }
-            }
-
-            );
-            setApartments(apartments.filter(ap => ap._id !== apartmentId));
+            });
+            setApartments(myapartments.filter(ap => ap._id !== myapartmentId));
         } catch (error) {
             alert('מחיקה נכשלה');
         }
@@ -78,10 +59,10 @@ export default function MyApartment() {
 
     return (
         <div className="card flex justify-content-center flex-wrap gap-3">
-            <AddApartment getApartments={getApartments}/>
-            <UpdateApartment apartment={apartment} visibleUpdate={visibleUpdate} setVisibleUpdate={setVisibleUpdate} getApartments={getApartments} ></UpdateApartment>
-            {apartments.length === 0 && <p>אין לך דירות להצגה.</p>}
-            {apartments.map((apartment) => (
+            {/* <AddApartment getApartments={getApartments}/> */}
+            {/* <UpdateApartment apartment={apartment} visibleUpdate={visibleUpdate} setVisibleUpdate={setVisibleUpdate} getApartments={getApartments} ></UpdateApartment> */}
+            {myapartments.length === 0 && <p>אין לך דירות להצגה.</p>}
+            {myapartments.map((apartment) => (
                 <Card
                     key={apartment._id}
                     title={`דירה ב${apartment.city}`}
@@ -93,11 +74,7 @@ export default function MyApartment() {
                                 onClick={() => { setSelectedApartment(apartment); setIsModalVisible(true); }} />
                             <Button label="מחיקה" icon="pi pi-trash" severity="danger"
                                 onClick={() => handleDelete(apartment._id)} />
-                            <Button label="עריכה" icon="pi pi-pencil" severity="info"
-                                onClick={() => (setApartment(apartment), setVisibleUpdate(true))} />
-                            {/* <Button label="יצירת קשר" icon="pi pi-envelope" severity="success"
-                                onClick={() => handleContact(apartment)} /> */}
-                                
+                           
                                 
                         </div>
                     }

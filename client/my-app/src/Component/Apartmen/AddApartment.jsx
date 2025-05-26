@@ -126,7 +126,7 @@ import { InputText } from 'primereact/inputtext';
 import axios from 'axios';
 import { useSelector } from "react-redux";
 
-export default function AddApartment() {
+export default function AddApartment({getApartments}) {
     const [visible, setVisible] = useState(false);
     const [city, setCity] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
@@ -172,10 +172,13 @@ export default function AddApartment() {
             description,
             options: options.split(','), // במידה ורשימת אפשרויות מופרדת בפסיקים
             img: img ? img.split(',') : [],
-        })
+        },
+        {headers:{Authorization:`Bearer ${token}`}}
+    )
         .then((response) => {
             alert('Apartment added!');
             resetFields();
+            getApartments()
             setVisible(false);
         })
         .catch((error) => {

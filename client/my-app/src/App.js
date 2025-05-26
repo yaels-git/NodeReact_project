@@ -10,12 +10,14 @@ import Hhh from './Component/hhh.jsx';
 import CardApartmen from './Component/Apartmen/CardApartmen.jsx';
 import Cardapartmen from './Component/Apartmen/CardApartmen.jsx';
 import MyApartment from './Component/Apartmen/MyApartment.jsx';
+import Myfavorites from './Component/Apartmen/Myfavorites.jsx'
 function App() {
   const { token, role, user } = useSelector((state) => state.token);
 
   return (<>
 {role=="User"?  <Home></Home>:role=="User"?<Home></Home>:<></>}
     <Routes>
+      <Route path='/myfavorites'element={<Myfavorites/>}/>
       <Route path="/" element={< LoginDemo />} />
       <Route path="/Home" element={<Home />} />
       <Route path="/cardApartmen" element={<CardApartmen/>} />

@@ -30,6 +30,11 @@ export default function TemplateDemo() {
             icon: 'pi pi-star',
             command: () => navigate('/myapartment') // ניווט ל-CardApartmen
         },
+        {
+            label: 'Myfavorites',
+            icon: 'pi pi-star',
+            command: () => navigate('/myfavorites') // ניווט ל-CardApartmen
+        },
 
 
     ];

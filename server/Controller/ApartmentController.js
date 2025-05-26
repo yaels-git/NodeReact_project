@@ -84,7 +84,8 @@ const getAllApartments = async (req, res) => {
 }
 const updateApartment = async (req, res) => {
     const { _id, user, city, neighborhood, street, building, floor, price, img, size, numOfRooms, airDirections, description, options } = req.body
-    if (!_id || (!user || !city || !neighborhood || !street || !building || !floor || !price || !size || !numOfRooms || !airDirections || !description || !options))
+    console.log(_id ,user ,city  ,street,building ,price ,size,numOfRooms,airDirections,description ,options);
+    if (!_id || (!user || !city  || !street || !price || !size || !numOfRooms || !airDirections || !description || !options))
         return res.status(400).json({ message: 'feild is required' })
     const apartment = await Apartment.findById(_id).exec()
     if (!apartment)
@@ -96,10 +97,10 @@ const updateApartment = async (req, res) => {
     }
     apartment.user = user
     apartment.city = city
-    apartment.neighborhood = neighborhood
+    apartment.neighborhood = neighborhood?neighborhood:null
     apartment.street = street
-    apartment.building = building
-    apartment.floor = floor
+    apartment.building = building?building:0
+    apartment.floor = floor?floor:0
     apartment.price = price
     apartment.img = img
     apartment.size = size

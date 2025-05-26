@@ -11,4 +11,4 @@ const myApartments=mongoose.Schema({
         required:true
     }
 },{timstamps:true})
-module.exports=mongoose.module('MyApartments',myApartments)
+module.exports=mongoose.model('MyApartment',myApartments)

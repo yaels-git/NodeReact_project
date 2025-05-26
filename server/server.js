@@ -19,8 +19,8 @@ app.use("/api/apartment",require("./Routes/Apartment"))
 app.use("/api/user",require("./Routes/User"))
 app.use('/api/auth',require('./Routes/authRoutes'))
 
+app.use('/api/myapartments',require('./Routes/MyApartment'))
 
-app.get('/',(req,res)=>{res.send("this is home page")})
 
 
 

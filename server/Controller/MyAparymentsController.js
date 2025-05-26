@@ -1,52 +1,58 @@
-const MyApartment=require("../Modules/MyApartments")
+const MyApartment = require("../Modules/MyApartments");
 
-const createNewMyApartments=async(req,res)=>{
-    const {city,neighborhood,street,building}=req.body
-    if(!city||!street||!building)
-        return res.status(201).json({message:'new myApartment created'})
-    const myApartment =await MyApartment.create({city,neighborhood,street,building})
-    if(myApartment){
-        return res.status(201).json({message:'new myApartment created'})
-    }else{
-        return res.status(400).json({message:'invalid myApartment'})
+// קבלת כל דירות המשתמש
+const getAllMyApartments = async (req, res) => {
+    try {
+        
+    
+        const myApartments = await MyApartment.find().populate('apartment user');
+        res.json(myApartments);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
+};
+const getAllMyApartmentsId = async (req, res) => {
+    const { id } = req.params
+    const myApartments = await MyApartment.find({ user: id }).lean()
+    if (!myApartments)
+        return res.status(400).json({ message: 'apartment not found' })
+    res.json(myApartments)
 }
-const getAllMyApartmentes=async(req,res)=>{
-    const myApartmentes=await MyApartment.find().lean()
-    if(!myApartmentes?.length){
-        return res.status(400).json({message:'No myApartmentes found'})
+// יצירת רשומה חדשה ב-MyApartments
+const createMyApartment = async (req, res) => {
+     console.log("user.id");
+    try {
+        const { user, apartment } = req.body;
+        if (!user || !apartment) {
+            return res.status(400).json({ message: 'user and apartment are required' });
+        }
+        // בדיקה אם הדירה כבר קיימת למשתמש
+        const myApartments = await MyApartment.findOne({user:user,apartment:apartment});
+if( myApartments) {
+            return res.status(401).json({ message: 'Apartment already exists for this user' });
+        }
+        const myApartment = await MyApartment.create({ user, apartment }); // כאן השינוי - שם נכון
+
+        res.status(201).json(myApartment);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-    res.json(myApartmentes)
-}
-const updateMyApartment=async(req,res)=>{
-    const {city,neighborhood,street,building}=req.body
-    if(!_id||!(city||neighborhood||street||building))
-        return res.status(400).json({message:'feild is required'})
-    const myApartment=await MyApartment.findById(_id).exec()
-    if(!myApartment)
-        return res.status(400).json({message:'myApartment not fount'})
-    myApartment.city=city
-    myApartment.neighborhood=neighborhood
-    myApartment.street=street
-    myApartment.building=building
-    const updatedMyApartment=await myApartment.save()
-    res.json(`'${updatedMyApartment.city} 'updated`)
-}
-const deleteMyApartment=async (req,res)=>{
-    const{_id}=req.body
-    const myApartment=await MyApartment.findById(_id).exec()
-    if(!myApartment)
-        return res.status(400).json({message:'myApartment not found'})
-    const result=MyApartment.deleteOne()
-    // res.json(`apartment` result)
-}
-const getMyApartmentById=async(req,res)=>{
-    const{_id}=req.params
-    const myApartment=await MyApartment.findById(_id)
-    if(!myApartment)
-        return res.status(400).json({message:'myApartment not found'})
-    res.json(myApartment)
-}
+};
 
+const deleteMyApartment = async (req, res) => {
+    const { id } = req.params;
+    console.log("deleteMyApartment",id);
+    try {
+        const myApartment = await MyApartment.findById(id).exec();
+        console.log(myApartment,id);
+        if (!myApartment) {
+            return res.status(404).json({ message: 'MyApartment not found' });
+        }
+        await MyApartment.deleteOne({ _id: id });
+        res.json({ message: 'MyApartment deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
-module.exports={createNewMyApartments,getAllMyApartmentes,getMyApartmentById,updateMyApartment,deleteMyApartment}
+module.exports = { getAllMyApartmentsId, createMyApartment, deleteMyApartment,getAllMyApartments };
