@@ -44,19 +44,40 @@ const createNewApartment = async (req, res) => {
     }
 
 }
-
+//אישור דירה
 const logInApartment = async (req, res) => {
     const { _id } = req.body
     if (!_id) {
         return res.status(400).json({ message: 'Apartment ID is required' });
     }
     const apartment = await Apartment.findById(_id).exec()
+    console.log(apartment);
+    
     if (!apartment)
         return res.status(400).json({ message: 'apartment not found' })
+    
     apartment.isConfirm = true
     const updatedApartment = await apartment.save()
     res.json(`'${updatedApartment.user} 'updated`)
 }
+//אישור דירה ביטול 
+const deleteconfrimInApartment = async (req, res) => {
+    const { _id } = req.body
+    if (!_id) {
+        return res.status(400).json({ message: 'Apartment ID is required' });
+    }
+    const apartment = await Apartment.findById(_id).exec()
+    console.log(apartment);
+    
+    if (!apartment)
+        return res.status(400).json({ message: 'apartment not found' })
+    
+    apartment.isConfirm = false
+    const updatedApartment = await apartment.save()
+    res.json(`'${updatedApartment.user} 'updated`)
+}
+
+//אישור קנית דירה
 const ApartmentConfirm = async (req, res) => {
     const { _id } = req.body
     if (!_id) {
@@ -69,11 +90,17 @@ const ApartmentConfirm = async (req, res) => {
     const updatedApartment = await apartment.save()
     res.json(`'${updatedApartment.user} 'updated`)
 }
+//תצוגת כל הדירות שלא מאושרות
+const getnutCanfirnApartment= async (req,res)=>{
+    const apartment = await Apartment.find({ isConfirm: false }).lean()
+    if (!apartment?.length) {
+        return res.status(400).json({ message: 'No apartment found' })
+    }
+    res.json(apartment)
+    
+}
 
-
-
-
-//תצוגת כל הדירות
+//תצוגת הדירות המאושרות
 const getAllApartments = async (req, res) => {
     const apartment = await Apartment.find({ isConfirm: true }).lean()
     if (!apartment?.length) {
@@ -176,5 +203,7 @@ module.exports = {
     // deleteMyApartment,
     ApartmentConfirm,
     logInApartment,
-    deleteApartment
+    deleteApartment,
+    getnutCanfirnApartment,
+    deleteconfrimInApartment
 }

@@ -161,7 +161,7 @@ const createMyApartment = async (apartment) => {
                         <p><strong>מספר חדרים:</strong> {selectedApartment.numOfRooms}</p>
                         <p><strong>כיווני אוויר:</strong> {selectedApartment.airDirections}</p>
                         <p><strong>אפשרויות נוספות:</strong> {selectedApartment.options.join(', ')}</p>
-                        <p><strong>תיאור:</strong> {selectedApartment.discreption}</p>
+                        <p><strong>תיאור:</strong> {selectedApartment.description}</p>
                     </div>
                 )}
             </Dialog>

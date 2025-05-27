@@ -4,7 +4,7 @@ import { InputText } from 'primereact/inputtext';
 import { Badge } from 'primereact/badge';
 import { Avatar } from 'primereact/avatar';
 import { Button } from 'primereact/button';
-import { logOut } from '../redux/tokenSlice';
+import { logOut } from '../../redux/tokenSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 export default function TemplateDemo() {

@@ -117,8 +117,8 @@ import { Button } from 'primereact/button';
 import Sinup from './Sinup';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // ייבוא useNavigate
-import { useDispatch,useSelector } from 'react-redux';
-import { setToken, setUser,setRole } from '../../redux/tokenSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken, setUser, setRole } from '../../redux/tokenSlice';
 
 export default function LoginDemo() {
     const [username, setUsername] = useState('');
@@ -129,7 +129,7 @@ export default function LoginDemo() {
     const navigate = useNavigate(); // יצירת פונקציה לניווט
     const handleLogin = () => {
         // שליחת בקשה לשרת
-       axios.post('http://localhost:1111/api/auth/login', {
+        axios.post('http://localhost:1111/api/auth/login', {
 
             username, password
         })
@@ -139,10 +139,13 @@ export default function LoginDemo() {
                 dispatch(setToken(response.data.accessToken));
                 // localStorage.setItem('token', response.data.accessToken); // שמירת טוקן הגישה ב-localStorage
                 console.log('Token:', response.data.accessToken);
-            //    setShowCardApartmen(true); // הצגת קומפוננטת כרטיס הדירה
-                 navigate('/cardApartmen'); // ניווט לדף הבית לאחר התחברות מוצלחת
-                
-                 if (!response.ok) {
+                //    setShowCardApartmen(true); // הצגת קומפוננטת כרטיס הדירה
+                if (response.data.role == "User")
+                    navigate('/cardApartmen'); // ניווט לדף הבית לאחר התחברות מוצלחת
+                else {
+                    navigate('/Cardapartmen_Maneger'); 
+                }
+                if (!response.ok) {
                     throw new Error('Invalid credentials');
                 }
                 return response.json();

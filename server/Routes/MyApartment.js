@@ -5,7 +5,7 @@ const verifyJWT=require("../middleWare/varifyJWT")
 const MyApartment = require('../Controller/MyAparymentsController');
 
 // יצירת דירה חדשה
-router.post('/', MyApartment.createMyApartment);
+router.post('/',verifyJWT, MyApartment.createMyApartment);
 
 // קבלת כל הדירות
 router.get('/',MyApartment.getAllMyApartments);
